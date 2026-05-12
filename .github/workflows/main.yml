@@ -4,17 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       url:
-        description: 'URL of the page/file to download'
+        description: 'URL to download'
         required: true
-        default: ''
-
-permissions:
-  contents: write
 
 jobs:
   download-process:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -26,20 +21,18 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # اضافه کردن کتابخانه‌های احتمالی مورد نیاز
-          pip install requests
+          pip install pyppeteer
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev libnss3 libatk-bridge2.0-0 libgtk-3-0 # این‌ها برای اجرای مرورگر ضروری هستند
 
       - name: Run Downloader
         run: |
-          # اجرای اسکریپت با ورودی URL
-          python save_as_mhtml.py "${{ github.event.inputs.url }}"
+          python save_as_mhtml.py --url "${{ github.event.inputs.url }}"
 
-      - name: Commit and Push changes
+      - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Automated download: $(date)" || echo "No changes to commit"
+          git commit -m "New Download: $(date)" || echo "No changes"
           git push
