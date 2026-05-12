@@ -1,0 +1,73 @@
+name: MHTML Downloader
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL of the page to download'
+        required: true
+        default: 'https://example.com'
+      title:
+        description: 'Optional title (filename)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install System Dependencies for Browser
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgbm-dev \
+            libnss3 \
+            libasound2 \
+            libxss1 \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libx11-xcb1 \
+            libxcb-dri3-0 \
+            libdrm2 \
+            libice6 \
+            libsm6
+
+      - name: Install Python Dependencies
+        run: |
+          pip install pyppeteer
+
+      - name: Run Downloader
+        run: |
+          # اجرای کد شما دقیقاً با همان آرگومان‌ها
+          if [ -z "${{ github.event.inputs.title }}" ]; then
+            python save_as_mhtml.py --url "${{ github.event.inputs.url }}"
+          else
+            python save_as_mhtml.py --url "${{ github.event.inputs.url }}" --title "${{ github.event.inputs.title }}"
+          fi
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # اضافه کردن فایل‌های جدید در پوشه download
+          git add download/
+          
+          # بررسی اینکه آیا واقعاً فایلی برای کامیت وجود دارد یا خیر (برای جلوگیری از خطا)
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Add new MHTML download: ${{ github.event.inputs.url }}"
+            git push
+          else
+            echo "No changes to commit. File might already exist or download failed."
+          fi
