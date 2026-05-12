@@ -1,62 +1,42 @@
-<div align="center">
-
 # 📦 Smarts-Downloader
-**Automated Cloud-Based Download Manager powered by GitHub Actions**
-
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-Enabled-green?logo=githubactions)](https://github.com/features/actions)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)](https://www.python.org/)
-
-</div>
+> **A high-performance cloud automation tool for file management and web archiving.**
 
 ---
 
-## 🌐 پروژه Smarts-Downloader چیست؟
+### 🌐 Overview | معرفی پروژه
+**Smarts-Downloader** is an automated tool designed to leverage **GitHub Actions** for downloading, splitting, and managing files directly in the cloud.
 
-این پروژه یک ابزار اتوماسیون قدرتمند است که از زیرساخت **GitHub Actions** برای دانلود و پردازش فایل‌ها استفاده می‌کند. تمام فرآیندها روی سرورهای ابری اجرا می‌شوند؛ بنابراین شما نیازی به استفاده از پهنای باند شخصی یا نصب نرم‌افزار روی سیستم خود ندارید.
-
-### 💡 چرا از این ابزار استفاده کنیم؟
-*   **سرورهای قدرتمند:** استفاده از پهنای باند و سرعت بالای سرورهای گیت‌هاب.
-*   **بدون نیاز به نصب:** همه‌چیز در محیط Runner گیت‌هاب اجرا می‌شود.
-*   **تقسیم خودکار فایل:** فایل‌های بزرگ به‌صورت خودکار به پارت‌های ۹۵ مگابایتی تقسیم می‌شوند تا با محدودیت‌های گیت‌هاب سازگار باشند.
-*   **ذخیره‌سازی مستقیم:** فایل‌ها پس از دانلود مستقیماً در همین ریپازیتوری کامیت (Commit) می‌شوند.
+این پروژه یک ابزار اتوماسیون است که با استفاده از سرورهای گیت‌هاب، فایل‌ها را دانلود، پارت‌بندی و در فضای ابری ذخیره می‌کند. بدون نیاز به مصرف حجم اینترنت شخصی یا روشن بودن کامپیوتر.
 
 ---
 
-## ✨ قابلیت‌های کلیدی
-
-| قابلیت | توضیحات |
-| :--- | :--- |
-| 📥 **Direct Downloader** | دانلود هر فایلی از لینک مستقیم و ذخیره در پوشه `downloads/`. |
-| 🎬 **Media Downloader** | دانلود ویدیو و صوت از YouTube و SoundCloud با کیفیت دلخواه. |
-| 📱 **Telegram & Play Store** | دریافت فایل از کانال‌های عمومی تلگرام و اپلیکیشن‌های گوگل‌پلی. |
-| 🌐 **Web Archiver** | ذخیره کامل صفحات وب به فرمت MHTML (مناسب برای مطالعه آفلاین). |
-| 🛠️ **Auto Splitter** | تقسیم خودکار فایل‌های حجیم برای عبور از محدودیت ۱۰۰ مگابایتی گیت‌هاب. |
+### ✨ Key Features | ویژگی‌های کلیدی
+*   **Cloud-Based:** Runs entirely on GitHub servers.
+*   **Auto-Splitter:** Automatically splits large files (>100MB) for GitHub compatibility.
+*   **Web Archiver:** Saves web pages as MHTML for offline reading.
+*   **Multi-Source:** Supports direct links, media files, and more.
 
 ---
 
-## 🚀 راهنمای سریع شروع (Setup)
+### 🚀 Setup Guide | راهنمای راه‌اندازی
+To allow the scripts to save files in this repository, follow these steps:
 
-برای اینکه اکشن‌ها اجازه داشته باشند فایل‌ها را در ریپازیتوری شما ذخیره کنند، حتماً مراحل زیر را انجام دهید:
-
-### ۱. تنظیم دسترسی‌ها (Permissions)
-1.  به تب **Settings** ⚙️ در بالای همین صفحه بروید.
-2.  از منوی سمت چپ، روی **Actions** و سپس **General** کلیک کنید.
-3.  در انتهای صفحه، بخش **Workflow permissions** را پیدا کنید.
-4.  گزینه **Read and write permissions** را انتخاب و **Save** کنید.
-
-### ۲. اجرای اولین دانلود
-1.  به تب **Actions** بروید.
-2.  از لیست سمت چپ، نوع دانلود مورد نظر خود را انتخاب کنید.
-3.  روی دکمه **Run workflow** کلیک کرده و لینک فایل را وارد کنید.
-4.  پس از پایان، فایل شما در پوشه `downloads/` آماده خواهد بود.
+۱. به بخش **Settings** و سپس **Actions > General** بروید.
+۲. در قسمت **Workflow permissions**، دسترسی را روی **Read and write permissions** قرار دهید و ذخیره کنید.
+۳. حالا از تب **Actions** می‌توانید اسکریپت‌ها را اجرا کنید.
 
 ---
 
-## 📁 ساختار پروژه
-```text
-Smarts-Downloader/
-├── .github/workflows/    # اسکریپت‌های اتوماسیون گیت‌هاب
-├── downloads/            # محل ذخیره فایل‌های نهایی
-├── save_as_mhtml.py      # اسکریپت آرشیو صفحات وب
-└── README.md             # راهنمای پروژه
+### ⚠️ Disclaimer | سلب مسئولیت
+
+**English:**  
+This software is provided "as is" for educational and personal use only. The author is not responsible for any misuse, copyright violations, or damages arising from the use of this tool. Users are responsible for complying with the terms of service of any platform they interact with.
+
+**فارسی:**  
+این نرم‌افزار صرفاً جهت مقاصد آموزشی و استفاده شخصی ارائه شده است. مسئولیت رعایت قوانین پلتفرم‌ها و کپی‌رایت بر عهده کاربر است و توسعه‌دهنده هیچ مسئولیتی در قبال نحوه استفاده از این ابزار ندارد.
+
+---
+
+<p align="center">
+  Developed with ❤️ for Automation
+</p>
