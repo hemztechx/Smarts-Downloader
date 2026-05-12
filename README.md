@@ -1,42 +1,47 @@
 # 📦 Smarts-Downloader
-> **A high-performance cloud automation tool for file management and web archiving.**
+
+> A lightweight cloud automation utility for downloading, archiving, and managing files using GitHub Actions.
 
 ---
 
-### 🌐 Overview | معرفی پروژه
-**Smarts-Downloader** is an automated tool designed to leverage **GitHub Actions** for downloading, splitting, and managing files directly in the cloud.
+## 🌐 Overview | معرفی پروژه
 
-این پروژه یک ابزار اتوماسیون است که با استفاده از سرورهای گیت‌هاب، فایل‌ها را دانلود، پارت‌بندی و در فضای ابری ذخیره می‌کند. بدون نیاز به مصرف حجم اینترنت شخصی یا روشن بودن کامپیوتر.
+Smarts-Downloader is a GitHub Actions based automation tool that can download files, archive web pages, and manage large outputs directly in the cloud environment.
 
----
-
-### ✨ Key Features | ویژگی‌های کلیدی
-*   **Cloud-Based:** Runs entirely on GitHub servers.
-*   **Auto-Splitter:** Automatically splits large files (>100MB) for GitHub compatibility.
-*   **Web Archiver:** Saves web pages as MHTML for offline reading.
-*   **Multi-Source:** Supports direct links, media files, and more.
+این پروژه یک ابزار مبتنی بر GitHub Actions است که برای دانلود فایل‌ها، آرشیو صفحات وب و مدیریت فایل‌های حجیم در فضای ابری طراحی شده است.
 
 ---
 
-### 🚀 Setup Guide | راهنمای راه‌اندازی
-To allow the scripts to save files in this repository, follow these steps:
+## ✨ Features | قابلیت‌ها
 
-۱. به بخش **Settings** و سپس **Actions > General** بروید.
-۲. در قسمت **Workflow permissions**، دسترسی را روی **Read and write permissions** قرار دهید و ذخیره کنید.
-۳. حالا از تب **Actions** می‌توانید اسکریپت‌ها را اجرا کنید.
+- Cloud-based execution
+- Automatic large file splitting
+- Web page archiving (MHTML)
+- Direct download support
+- No local system resources required
 
 ---
 
-### ⚠️ Disclaimer | سلب مسئولیت
+## 🚀 Quick Setup | راه‌اندازی سریع
 
-**English:**  
-This software is provided "as is" for educational and personal use only. The author is not responsible for any misuse, copyright violations, or damages arising from the use of this tool. Users are responsible for complying with the terms of service of any platform they interact with.
+To enable workflows to upload files into the repository:
 
-**فارسی:**  
-این نرم‌افزار صرفاً جهت مقاصد آموزشی و استفاده شخصی ارائه شده است. مسئولیت رعایت قوانین پلتفرم‌ها و کپی‌رایت بر عهده کاربر است و توسعه‌دهنده هیچ مسئولیتی در قبال نحوه استفاده از این ابزار ندارد.
+1. Open `Settings → Actions → General`
+2. Enable `Read and write permissions`
+3. Save changes
+4. Run workflows from the `Actions` tab
+
+---
+
+## ⚠️ Disclaimer
+
+This project is intended for educational and personal automation purposes only.  
+Users are responsible for complying with the terms and policies of any service they use with this tool.
+
+این پروژه صرفاً برای اهداف آموزشی و استفاده شخصی ارائه شده است و مسئولیت استفاده از آن بر عهده کاربر خواهد بود.
 
 ---
 
 <p align="center">
-  Developed with ❤️ for Automation
+Made for cloud automation ⚡
 </p>
