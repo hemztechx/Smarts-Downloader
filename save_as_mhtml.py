@@ -1,44 +1,53 @@
 import asyncio
-import zipfile
 import os
 import re
 import argparse
-from pyppeteer import launch
 from urllib.parse import urlparse
+from pyppeteer import launch
+
 
 def sanitize_filename(name: str) -> str:
-    """حذف کاراکترهای غیرمجاز برای نام فایل"""
-    return re.sub(r'[\\/*?:"<>|]', "_", name)
+    return re.sub(r'[\\/*?:"<>|]+', "_", name).strip("_") or "downloaded_page"
+
 
 async def save_mhtml(url: str, output_file: str):
-    """ذخیره صفحه وب به صورت MHTML"""
-    # تنظیمات مخصوص اجرا در محیط لینوکس گیت‌هاب
-    browser = await launch(headless=True, args=['--no-sandbox', '--disable-setuid-sandbox'])
-    page = await browser.newPage()
-    await page.goto(url, {'waitUntil': 'networkidle0'})
-    mhtml_data = await page._client.send('Page.captureSnapshot', {})
-    with open(output_file, 'wb') as f:
-        f.write(mhtml_data['data'].encode())
-    await browser.close()
+    browser = None
+    try:
+        browser = await launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+            ],
+        )
+        page = await browser.newPage()
+        await page.goto(url, {"waitUntil": "networkidle2", "timeout": 120000})
+        mhtml = await page._client.send("Page.captureSnapshot", {})
+        with open(output_file, "wb") as f:
+            f.write(mhtml["data"].encode("utf-8", errors="ignore"))
+    finally:
+        if browser is not None:
+            await browser.close()
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", required=True)
     args = parser.parse_args()
 
-    # استخراج نام برای فایل خروجی از روی آدرس سایت
     parsed = urlparse(args.url)
-    base_name = sanitize_filename(parsed.netloc + parsed.path.replace('/', '_'))
-    if not base_name or base_name == "_":
-        base_name = "downloaded_page"
+    base = sanitize_filename(parsed.netloc + parsed.path.replace("/", "_"))
 
-    # ایجاد پوشه دانلود
     os.makedirs("download", exist_ok=True)
-    mhtml_path = os.path.join("download", f"{base_name}.mhtml")
+    out_path = os.path.join("download", f"{base}.mhtml")
 
-    print(f"Starting download: {args.url}")
-    asyncio.run(save_mhtml(args.url, mhtml_path))
-    print(f"✅ Successfully saved to: {mhtml_path}")
+    # راه مطمئن برای CI
+    asyncio.get_event_loop().run_until_complete(save_mhtml(args.url, out_path))
+
+    print(f"✅ Saved: {out_path}")
+
 
 if __name__ == "__main__":
     main()
