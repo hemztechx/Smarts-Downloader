@@ -1,0 +1,38 @@
+name: Direct File Downloader
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_url:
+        description: "Enter the direct file URL"
+        required: true
+        type: string
+
+jobs:
+  download_file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install required tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+
+      - name: Create downloads directory if not exists
+        run: mkdir -p downloads
+
+      - name: Download file
+        run: |
+          cd downloads
+          wget "${{ github.event.inputs.file_url }}" -O downloaded_file || echo "Download failed"
+
+      - name: Commit & Push downloaded file
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "Downloaded file added automatically" || echo "Nothing to commit"
+          git push
