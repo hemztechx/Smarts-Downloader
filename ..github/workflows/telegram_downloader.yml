@@ -1,0 +1,47 @@
+name: Telegram File Downloader
+
+on:
+  workflow_dispatch:
+    inputs:
+      message_link:
+        description: "Enter the Telegram message link (e.g., https://t.me/channel/123)"
+        required: true
+        type: string
+
+jobs:
+  download_telegram_file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Telethon
+        run: |
+          python -m pip install --upgrade pip
+          pip install telethon
+
+      - name: Create downloads directory
+        run: mkdir -p downloads
+
+      - name: Download from Telegram
+        env:
+          TG_API_ID: ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        run: |
+          python scripts/tg_downloader.py \
+            --link "${{ github.event.inputs.message_link }}"
+
+      - name: Commit & Push file
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add downloads || echo "Nothing to add"
+          git commit -m "Added file from Telegram automatically" || echo "Nothing to commit"
+          git push || echo "Nothing to push"
