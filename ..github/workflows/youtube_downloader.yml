@@ -1,0 +1,55 @@
+name: YouTube Downloader
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: "Enter the YouTube video URL"
+        required: true
+        type: string
+      format:
+        description: "Select output format (mp4/mp3)"
+        required: false
+        default: "mp4"
+        type: choice
+        options:
+          - mp4
+          - mp3
+
+jobs:
+  download_youtube_video:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install yt-dlp
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp
+
+      - name: Create downloads directory if not exists
+        run: mkdir -p downloads
+
+      - name: Download YouTube video
+        run: |
+          cd downloads
+          if [ "${{ github.event.inputs.format }}" = "mp3" ]; then
+            yt-dlp -x --audio-format mp3 "${{ github.event.inputs.video_url }}"
+          else
+            yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "${{ github.event.inputs.video_url }}"
+          fi
+
+      - name: Commit & Push downloaded video
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add downloads || echo "Nothing to add"
+          git commit -m "Added YouTube download automatically" || echo "Nothing to commit"
+          git push || echo "Nothing to push"
