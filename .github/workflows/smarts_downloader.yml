@@ -6,7 +6,7 @@ on:
       url:
         description: "URL to download"
         required: true
-        default: "https://google.com"
+        default: "https://example.com"
       filename:
         description: "Output file name"
         required: true
@@ -31,10 +31,21 @@ jobs:
 
       - name: Run Python Downloader
         run: |
-          python scripts/save_page.py "${{ github.event.inputs.url }}" "${{ github.event.inputs.filename }}"
+          python scripts/save_page.py \
+            "${{ github.event.inputs.url }}" \
+            "${{ github.event.inputs.filename }}"
 
-      - name: Upload result as artifact
+      # ۱) آپلود به عنوان Artifact (روش معمول گیت‌هاب)
+      - name: Upload as GitHub Artifact
         uses: actions/upload-artifact@v4
         with:
           name: downloaded-file
           path: ${{ github.event.inputs.filename }}
+
+      # ۲) آپلود روی transfer.sh و چاپ لینک در خروجی
+      - name: Upload to Transfer.sh
+        run: |
+          echo "Uploading to transfer.sh..."
+          RESPONSE=$(curl --silent --upload-file \
+            "${{ github.event.inputs.filename }}" \
+            "https://transfer.sh/${{
