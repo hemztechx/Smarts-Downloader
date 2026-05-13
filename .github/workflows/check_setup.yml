@@ -1,0 +1,16 @@
+    name: Check GitHub Actions Setup
+
+    on:
+      push:
+        branches:
+          - main
+      workflow_dispatch:
+
+    jobs:
+      check-setup:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+          - name: Echo a message
+            run: echo "GitHub Actions setup is correct!"
