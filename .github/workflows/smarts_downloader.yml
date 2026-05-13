@@ -1,40 +1,31 @@
-    name: Smarts Downloader
+name: Smarts Downloader
 
-    on:
-      workflow_dispatch:
-        inputs:
-          url:
-            description: "URL to download"
-            required: true
-          filename:
-            description: "Output file name"
-            required: true
-            default: "output.html"
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to download"
+        required: true
+        default: "https://google.com"
+      filename:
+        description: "Output file name"
+        required: true
+        default: "index.html"
 
-    jobs:
-      download:
-        runs-on: ubuntu-latest
+jobs:
+  download:
+    runs-on: ubuntu-latest
 
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-          - name: Set up Python
-            uses: actions/setup-python@v5
-            with:
-              python-version: "3.11"
+      - name: Download File using Curl
+        run: |
+          curl -L "${{ github.event.inputs.url }}" -o "${{ github.event.inputs.filename }}"
 
-          - name: Install dependencies
-            run: |
-              python -m pip install --upgrade pip
-              pip install requests
-
-          - name: Run downloader script
-            run: |
-              python scripts/save_as_mhtml.py "${{ github.event.inputs.url }}" "${{ github.event.inputs.filename }}"
-
-          - name: Upload result as artifact
-            uses: actions/upload-artifact@v4
-            with:
-              name: downloaded-file
-              path: ${{ github.event.inputs.filename }}
+      - name: Upload result as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: downloaded-file
+          path: ${{ github.event.inputs.filename }}
